@@ -1,0 +1,132 @@
+{
+  "results": {
+    "gpqa_diamond_cot_n_shot": {
+      "alias": "gpqa_diamond_cot_n_shot",
+      "exact_match,strict-match": 0.0,
+      "exact_match_stderr,strict-match": 0.0,
+      "exact_match,flexible-extract": 0.2676767676767677,
+      "exact_match_stderr,flexible-extract": 0.031544498882702866
+    }
+  },
+  "group_subtasks": {
+    "gpqa_diamond_cot_n_shot": []
+  },
+  "configs": {
+    "gpqa_diamond_cot_n_shot": {
+      "task": "gpqa_diamond_cot_n_shot",
+      "tag": "gpqa",
+      "dataset_path": "Idavidrein/gpqa",
+      "dataset_name": "gpqa_diamond",
+      "training_split": "train",
+      "validation_split": "train",
+      "process_docs": "def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:\n    def _process_doc(doc):\n        choices = [\n            preprocess(doc[\"Incorrect Answer 1\"]),\n            preprocess(doc[\"Incorrect Answer 2\"]),\n            preprocess(doc[\"Incorrect Answer 3\"]),\n            preprocess(doc[\"Correct Answer\"]),\n        ]\n\n        random.shuffle(choices)\n        correct_answer_index = choices.index(preprocess(doc[\"Correct Answer\"]))\n\n        out_doc = {\n            \"choice1\": choices[0],\n            \"choice2\": choices[1],\n            \"choice3\": choices[2],\n            \"choice4\": choices[3],\n            \"choices\": [choices[0], choices[1], choices[2], choices[3]],\n            \"answer\": f\"({chr(65 + correct_answer_index)})\",\n        }\n        return out_doc\n\n    return dataset.map(_process_doc)\n",
+      "doc_to_text": "Question: {{Question}}\nChoices:\n(A) {{choice1}}\n(B) {{choice2}}\n(C) {{choice3}}\n(D) {{choice4}}\nLet's think step by step: ",
+      "doc_to_target": "answer",
+      "unsafe_code": false,
+      "description": "Here are some example questions from experts. Answer the final question yourself, following the format of the previous questions exactly.\n",
+      "target_delimiter": " ",
+      "fewshot_delimiter": "\n\n",
+      "num_fewshot": 1,
+      "metric_list": [
+        {
+          "metric": "exact_match",
+          "aggregation": "mean",
+          "higher_is_better": true,
+          "ignore_case": true,
+          "ignore_punctuation": true
+        }
+      ],
+      "output_type": "generate_until",
+      "generation_kwargs": {
+        "until": [
+          "</s>"
+        ],
+        "do_sample": false,
+        "temperature": 0.0
+      },
+      "repeats": 1,
+      "filter_list": [
+        {
+          "name": "strict-match",
+          "filter": [
+            {
+              "function": "regex",
+              "regex_pattern": "(?<=The answer is )(.*)(?=.)"
+            },
+            {
+              "function": "take_first"
+            }
+          ]
+        },
+        {
+          "name": "flexible-extract",
+          "filter": [
+            {
+              "function": "multi_choice_regex",
+              "group_select": -1,
+              "ignore_case": true,
+              "ignore_punctuation": true,
+              "regex_pattern": "(\\([A-Z]\\))"
+            },
+            {
+              "function": "take_first"
+            }
+          ]
+        }
+      ],
+      "should_decontaminate": false,
+      "metadata": {
+        "version": 2.0
+      }
+    }
+  },
+  "versions": {
+    "gpqa_diamond_cot_n_shot": 2.0
+  },
+  "n-shot": {
+    "gpqa_diamond_cot_n_shot": 1
+  },
+  "higher_is_better": {
+    "gpqa_diamond_cot_n_shot": {
+      "exact_match": true
+    }
+  },
+  "n-samples": {
+    "gpqa_diamond_cot_n_shot": {
+      "original": 198,
+      "effective": 198
+    }
+  },
+  "config": {
+    "model": "openai-chat-completions",
+    "model_args": "model=llama-3-8b,tokenizer=None,num_concurrent=8,base_url=http://0.0.0.0:8111/chat/completions",
+    "batch_size": 1,
+    "batch_sizes": [],
+    "device": null,
+    "use_cache": null,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "gen_kwargs": null,
+    "random_seed": 0,
+    "numpy_seed": 1234,
+    "torch_seed": 1234,
+    "fewshot_seed": 1234
+  },
+  "git_hash": "29971faa",
+  "date": 1740509972.7594588,
+  "pretty_env_info": "'NoneType' object has no attribute 'splitlines'",
+  "transformers_version": "4.49.0",
+  "upper_git_hash": null,
+  "task_hashes": {},
+  "model_source": "openai-chat-completions",
+  "model_name": "llama-3-8b",
+  "model_name_sanitized": "llama-3-8b",
+  "system_instruction": null,
+  "system_instruction_sha": null,
+  "fewshot_as_multiturn": false,
+  "chat_template": "",
+  "chat_template_sha": null,
+  "start_time": 45531.756131172,
+  "end_time": 45713.850867919,
+  "total_evaluation_time_seconds": "182.09473674699984"
+}
