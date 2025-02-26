@@ -45,6 +45,7 @@ Variants:
 
 --model_args model=llama-3-8b,num_concurrent=8,tokenizer=None,base_url=http://0.0.0.0:8111/chat/completions
 --model_args model=qwen-2.5-1.5b,num_concurrent=8,tokenizer=None,base_url=http://0.0.0.0:8002/v1/chat/completions
+--model_args model=qwen-2.5-1.5b-grpo,num_concurrent=8,tokenizer=None,base_url=http://0.0.0.0:8802/v1/chat/completions
 
 lm_eval \
     --output_path outputs \
