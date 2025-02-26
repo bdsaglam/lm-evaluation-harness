@@ -57,6 +57,60 @@ class RegexFilter(Filter):
 
         return filtered_resps
 
+@register_filter("regex-dotall")
+class RegexDotallFilter(Filter):
+    """A filter that extracts values from text using regex pattern matching.
+
+    This filter applies a regex pattern to each model response and extracts matched values.
+    If no match is found, returns a fallback value. Useful for extracting structured data
+    (like numbers) from unstructured model outputs.
+    
+    This version uses the DOTALL flag, which makes the '.' character match any character
+    including newlines.
+    """
+
+    def __init__(
+        self,
+        regex_pattern: str = r"#### (\-?[0-9\.\,]+)",
+        group_select: int = 0,
+        fallback: str = "[invalid]",
+    ) -> None:
+        """
+        pass a string `regex` to run `re.compile(r"regex", re.DOTALL)` on.
+        `fallback` defines the output returned if no matches for the regex are located.
+        """
+        self.regex_pattern = regex_pattern
+        self.regex = re.compile(regex_pattern, re.DOTALL)
+        self.group_select = group_select
+        self.fallback = fallback
+
+    def apply(self, resps: list[list[str]], docs: list[dict]) -> list[list[str]]:
+        # here, we assume we have a list, in which each element is
+        # a list of model responses for some particular input/target pair.
+        # so we process each of these (same input/target response sets)
+        # independently (and keep them a list.)
+        def filter_set(inst):
+            filtered = []
+            for resp in inst:
+                match = self.regex.findall(resp)
+                if match:
+                    match = match[self.group_select]
+                    if isinstance(match, tuple):
+                        match = [m for m in match if m]
+                        if match:
+                            match = match[0]
+                        else:
+                            match = self.fallback
+                    match = match.strip()
+                else:
+                    match = self.fallback
+                filtered.append(match)
+            return filtered
+
+        filtered_resps = list(map(lambda x: filter_set(x), resps))
+
+        return filtered_resps
+
 
 @register_filter("remove_whitespace")
 class WhitespaceFilter(Filter):
