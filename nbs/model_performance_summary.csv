@@ -1,4 +1,6 @@
-benchmark,prompting,qwen-2.5-1.5b,qwen-2.5-1.5b-grpo
-gsm8k,COT-1,0.71875,0.6262319939347991
-gsm8k,COT-4,0.0,0.0
-gsm8k,COT-8,0.7,0.8
+benchmark,prompting,n_shot,Meta-Llama-3-8B-Instruct,Meta-Llama-3-8B-Instruct-GRPO
+gsm8k [:512],gsm8k,5,0.7109375,0.701171875
+gsm8k [:512],gsm8k_cot_llama,8,0.751953125,0.771484375
+gsm8k [:512],gsm8k_cot_org,8,0.671875,0.693359375
+gsm8k [:512],gsm8k_cot_zeroshot,0,0.708984375,0.71484375
+gsm8k [:512],gsm8k_grpo,0,0.73046875,0.78515625
