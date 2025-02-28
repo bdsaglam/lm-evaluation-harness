@@ -1,6 +1,11 @@
-benchmark,prompting,n_shot,Meta-Llama-3-8B-Instruct,Meta-Llama-3-8B-Instruct-GRPO
-gsm8k [:512],gsm8k,5,0.7109375,0.701171875
-gsm8k [:512],gsm8k_cot_llama,8,0.751953125,0.771484375
-gsm8k [:512],gsm8k_cot_org,8,0.671875,0.693359375
-gsm8k [:512],gsm8k_cot_zeroshot,0,0.708984375,0.71484375
-gsm8k [:512],gsm8k_grpo,0,0.73046875,0.78515625
+benchmark,prompting,n_shot,Meta-Llama-3-8B-Instruct,Meta-Llama-3-8B-Instruct-GRPO,Meta-Llama-3-8B-Instruct-GRPO-full
+gsm8k [:1319],gsm8k,5,,,0.7058377558756633
+gsm8k [:1319],gsm8k_cot_llama,8,0.759666413949962,,0.7892342683851402
+gsm8k [:1319],gsm8k_cot_org,8,,,0.6868840030326004
+gsm8k [:1319],gsm8k_cot_zeroshot,0,,,0.7149355572403336
+gsm8k [:1319],gsm8k_grpo,0,,0.7717968157695224,0.8066717210007581
+gsm8k [:512],gsm8k,5,0.7109375,0.701171875,
+gsm8k [:512],gsm8k_cot_llama,8,0.751953125,0.771484375,
+gsm8k [:512],gsm8k_cot_org,8,0.671875,0.693359375,
+gsm8k [:512],gsm8k_cot_zeroshot,0,0.708984375,0.71484375,
+gsm8k [:512],gsm8k_grpo,0,0.73046875,0.787109375,
